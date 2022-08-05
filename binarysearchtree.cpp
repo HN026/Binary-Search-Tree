@@ -85,6 +85,128 @@ struct Node * Search(int key)
 }
 
 
+struct Node *RInsert( struct Node *p , int key)
+{
+    struct Node *t = NULL;
+
+    if(p==NULL)
+    {
+        t = new struct Node;
+        t->data = key;
+        t->lchild = t->rchild = NULL;
+        return t;
+    }
+
+    else{ 
+    if(key<p->data)
+    {
+        p->lchild = RInsert(p->lchild, key);
+    }
+    else if( key>p->data)
+    {
+        p->rchild = RInsert(p->rchild, key);
+    }
+    else
+    {
+        return p;
+    }
+    }
+    
+};
+
+struct Node *InPre( struct Node *p)
+{
+    while(p!=NULL && p->rchild!=NULL)
+    {
+        p = p->rchild;
+    }
+    return p;
+};
+
+struct Node *InSucc(struct Node *p)
+{
+    while (p!=NULL && p->lchild!=NULL)
+    {
+        p = p->lchild;
+    }
+    return p;
+};
+
+
+int Height (struct Node *p)
+{
+    int x=0, y=0;
+    if(p==NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        x = Height(p->lchild);
+        y = Height(p->rchild);
+        if(x> y)
+        {
+            return x+1;
+        }
+        else
+        {
+            return y+1;
+        }
+    }
+}
+
+
+
+
+
+struct Node *Delete( struct Node *p, int key)
+{
+    struct Node *q = NULL;
+    if(p==NULL)
+    {
+        return NULL;
+    }
+
+    if(p->lchild == NULL && p->rchild ==  NULL)
+    {
+        if(p==NULL)
+        {
+            root = NULL;
+        }
+        delete p;
+        return NULL;
+    }
+
+
+    if (key < p-> data)
+    {
+        p->lchild = Delete(p->lchild, key);
+    }
+    else if (key > p->data)
+    {
+        p->rchild = Delete(p->rchild, key);
+    }
+    else
+    {
+        if(Height(p->lchild)> Height(p->rchild))
+        {
+            q = InPre(p->lchild);
+            p->data = q->data;
+            p->lchild = Delete(p->lchild, q->data);
+        }
+        else
+        {
+            q = InSucc(p->rchild);
+            p->data = q->data;
+            p->rchild = Delete(p->rchild, q->data);
+        }
+    }
+
+    return p;
+
+}
+
+
 
 
 
@@ -94,24 +216,38 @@ int main()
 {
     struct Node *temp;
 
-    Insert(10);
-    Insert(5);
-    Insert(20);
-    Insert(8);
-    Insert(30);
+    // Insert(10);
+    // Insert(5);
+    // Insert(20);
+    // Insert(8);
+    // Insert(30);
+
+    // Inorder(root);
+    // cout<<endl;
+
+    // temp = Search(2);
+    // if(temp!=NULL)
+    // {
+    //     cout<<"Element is found "<<temp->data<<endl;
+    // }
+    // else
+    // {
+    //     cout<<"Element is not found"<<endl;
+    // }
+
+
+    root = RInsert(root, 50);
+    RInsert(root, 10);
+    RInsert(root, 40);
+    RInsert(root, 20);
+    RInsert(root, 30);
+
+    Delete(root, 50);
 
     Inorder(root);
     cout<<endl;
 
-    temp = Search(2);
-    if(temp!=NULL)
-    {
-        cout<<"Element is found "<<temp->data<<endl;
-    }
-    else
-    {
-        cout<<"Element is not found"<<endl;
-    }
+    
 
     return 0;
 }
