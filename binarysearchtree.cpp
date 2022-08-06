@@ -206,6 +206,9 @@ struct Node *Delete( struct Node *p, int key)
 
 }
 
+void createPre( int Pre[], int n)
+
+
 
 
 
